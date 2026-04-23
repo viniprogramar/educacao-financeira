@@ -264,14 +264,14 @@
 
       <div class="card">
         <div class="q-num">Pergunta 01 <span class="optional-tag">Opcional</span></div>
-        <p class="q-text">Como você definiria Educação Financeira?</p>
+        <p class="q-text">Como você definiria educação financeira?</p>
         <textarea id="r1" placeholder="Escreva sua resposta aqui..." oninput="upd(1)"></textarea>
         <div class="char-count" id="c1">0 caracteres</div>
       </div>
 
       <div class="card">
         <div class="q-num">Pergunta 02 <span class="optional-tag">Opcional</span></div>
-        <p class="q-text">Considera o tema Educação Financeira relevante? De que maneira?</p>
+        <p class="q-text">Você considera o tema relevante para os estudantes?</p>
         <textarea id="r2" placeholder="Escreva sua resposta aqui..." oninput="upd(2)"></textarea>
         <div class="char-count" id="c2">0 caracteres</div>
       </div>
@@ -287,9 +287,7 @@
         <button class="btn-primary" id="send-btn" onclick="send()">Enviar respostas</button>
       </div>
 
-      <div class="footer">
-        UFPA Castanhal &nbsp;·&nbsp; Pesquisa Acadêmica &nbsp;·&nbsp; Dados anônimos
-      </div>
+
     </div>
 
     <div id="success-view">
@@ -306,19 +304,11 @@
   </div>
 
   <script>
-    const DB_KEY = 'ufpa-ef-respostas-v1';
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzbUkXBmNpbnUMZmZ5OCOSUH0GzVdMEuKA4LbU2-dxu97BsXG3GqOs07JqDsyUEjS6i/exec';
 
     function upd(n) {
       const len = document.getElementById('r' + n).value.length;
       document.getElementById('c' + n).textContent = len + ' caractere' + (len !== 1 ? 's' : '');
-    }
-
-    function getAll() {
-      try { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch { return []; }
-    }
-
-    function saveAll(arr) {
-      localStorage.setItem(DB_KEY, JSON.stringify(arr));
     }
 
     function send() {
@@ -333,20 +323,28 @@
 
       const btn = document.getElementById('send-btn');
       btn.disabled = true;
-      btn.textContent = 'Salvando...';
+      btn.textContent = 'Enviando...';
 
       const entry = {
-        id: Date.now(),
         date: new Date().toLocaleString('pt-BR'),
         r1, r2, r3
       };
 
-      const all = getAll();
-      all.push(entry);
-      saveAll(all);
-
-      document.getElementById('form-view').style.display = 'none';
-      document.getElementById('success-view').style.display = 'block';
+      fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entry)
+      })
+      .then(() => {
+        document.getElementById('form-view').style.display = 'none';
+        document.getElementById('success-view').style.display = 'block';
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = 'Enviar respostas';
+        alert('Erro ao enviar. Verifique sua conexão e tente novamente.');
+      });
     }
 
     function reset() {
