@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Educação Financeira — Pesquisa UFPA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F4F2EE;
+      --surface: #FFFFFF;
+      --text: #1C1C1A;
+      --muted: #5C5C58;
+      --border: rgba(0,0,0,0.1);
+      --blue: #003087;
+      --blue-light: #E8EDF5;
+      --green: #1B5E35;
+      --green-bg: #E0F0E8;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem 1rem 5rem;
+    }
+
+    .container {
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    .inst-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .inst-header img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .inst-info {
+      border-left: 2px solid var(--blue);
+      padding-left: 1rem;
+    }
+
+    .inst-name {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .inst-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .inst-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .notice {
+      background: var(--blue-light);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--blue);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .card:focus-within {
+      border-color: rgba(0,0,80,0.2);
+    }
+
+    .q-num {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .optional-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      background: #F0EDE8;
+      color: var(--muted);
+      border-radius: 20px;
+      padding: 2px 8px;
+    }
+
+    .q-text {
+      font-family: 'Source Serif 4', serif;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: #F7F5F2;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 11px 13px;
+      resize: vertical;
+      min-height: 100px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      line-height: 1.65;
+    }
+
+    textarea::placeholder { color: #B0ADA6; }
+
+    textarea:focus {
+      border-color: rgba(0,0,80,0.15);
+      background: #FFFFFF;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+      margin-top: 5px;
+      opacity: 0.55;
+    }
+
+    .btn-wrap { margin-top: 1.25rem; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      background: var(--blue);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover { background: #004099; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    #success-view {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .checkmark {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--green-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    #success-view h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    #success-view p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 11px 28px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-outline:hover { background: rgba(0,0,0,0.04); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div id="form-view">
+
+      <div class="inst-header">
+        <img src="logo_ufpa_castanhal.png" alt="Logo UFPA Castanhal" />
+        <div class="inst-info">
+          <div class="inst-name">Universidade Federal do Pará</div>
+          <div class="inst-title">Pesquisa sobre Educação Financeira</div>
+          <div class="inst-sub">Campus Castanhal</div>
+        </div>
+      </div>
+
+      <div class="notice">
+        Todas as perguntas são opcionais. Responda apenas as que desejar. Suas respostas são anônimas e serão utilizadas exclusivamente para fins acadêmicos.
+      </div>
+
+      <div class="card">
+        <div class="q-num">Pergunta 01 <span class="optional-tag">Opcional</span></div>
+        <p class="q-text">Como você definiria Educação Financeira?</p>
+        <textarea id="r1" placeholder="Escreva sua resposta aqui..." oninput="upd(1)"></textarea>
+        <div class="char-count" id="c1">0 caracteres</div>
+      </div>
+
+      <div class="card">
+        <div class="q-num">Pergunta 02 <span class="optional-tag">Opcional</span></div>
+        <p class="q-text">Considera o tema Educação Financeira relevante? De que maneira?</p>
+        <textarea id="r2" placeholder="Escreva sua resposta aqui..." oninput="upd(2)"></textarea>
+        <div class="char-count" id="c2">0 caracteres</div>
+      </div>
+
+      <div class="card">
+        <div class="q-num">Pergunta 03 <span class="optional-tag">Opcional</span></div>
+        <p class="q-text">Como você acha que a tecnologia pode agregar na apresentação e consolidação do tema nas escolas?</p>
+        <textarea id="r3" placeholder="Escreva sua resposta aqui..." oninput="upd(3)"></textarea>
+        <div class="char-count" id="c3">0 caracteres</div>
+      </div>
+
+      <div class="btn-wrap">
+        <button class="btn-primary" id="send-btn" onclick="send()">Enviar respostas</button>
+      </div>
+
+      <div class="footer">
+        UFPA Castanhal &nbsp;·&nbsp; Pesquisa Acadêmica &nbsp;·&nbsp; Dados anônimos
+      </div>
+    </div>
+
+    <div id="success-view">
+      <div class="checkmark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M5 14.5L11 20.5L23 8" stroke="#1B5E35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Resposta registrada!</h2>
+      <p>Obrigado pela sua participação.<br>Suas respostas foram salvas com sucesso e contribuirão para a pesquisa.</p>
+      <button class="btn-outline" onclick="reset()">Responder novamente</button>
+    </div>
+
+  </div>
+
+  <script>
+    const DB_KEY = 'ufpa-ef-respostas-v1';
+
+    function upd(n) {
+      const len = document.getElementById('r' + n).value.length;
+      document.getElementById('c' + n).textContent = len + ' caractere' + (len !== 1 ? 's' : '');
+    }
+
+    function getAll() {
+      try { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch { return []; }
+    }
+
+    function saveAll(arr) {
+      localStorage.setItem(DB_KEY, JSON.stringify(arr));
+    }
+
+    function send() {
+      const r1 = document.getElementById('r1').value.trim();
+      const r2 = document.getElementById('r2').value.trim();
+      const r3 = document.getElementById('r3').value.trim();
+
+      if (!r1 && !r2 && !r3) {
+        alert('Por favor, preencha pelo menos uma resposta antes de enviar.');
+        return;
+      }
+
+      const btn = document.getElementById('send-btn');
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+
+      const entry = {
+        id: Date.now(),
+        date: new Date().toLocaleString('pt-BR'),
+        r1, r2, r3
+      };
+
+      const all = getAll();
+      all.push(entry);
+      saveAll(all);
+
+      document.getElementById('form-view').style.display = 'none';
+      document.getElementById('success-view').style.display = 'block';
+    }
+
+    function reset() {
+      ['r1', 'r2', 'r3'].forEach(id => document.getElementById(id).value = '');
+      ['c1', 'c2', 'c3'].forEach(id => document.getElementById(id).textContent = '0 caracteres');
+      const btn = document.getElementById('send-btn');
+      btn.disabled = false;
+      btn.textContent = 'Enviar respostas';
+      document.getElementById('success-view').style.display = 'none';
+      document.getElementById('form-view').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
